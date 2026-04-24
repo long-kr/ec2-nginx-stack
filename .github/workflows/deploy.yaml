@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
@@ -19,11 +22,11 @@ jobs:
 
       - name: Deploy on EC2
         run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             set -e
             mkdir -p ${{ secrets.APP_DIR }}
             cd ${{ secrets.APP_DIR }}
-
+            ls 
             if [ ! -d .git ]; then
               git clone "https://github.com/long-kr/ec2-nginx-stack.git" .
             fi
